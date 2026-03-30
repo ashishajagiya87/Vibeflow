@@ -1,0 +1,7 @@
+Flask
+PyPDF2
+ollama
+python-dotenv
+Werkzeug
+
+#-> pip install -r requirements.txt

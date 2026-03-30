@@ -1,0 +1,1245 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    /* Global Section Styles */
+    :root {
+        --primary-glow: #00d2ff;
+        --secondary-glow: #92fe9d;
+        --dark-bg: #050b18;
+        --glass-bg: rgba(255, 255, 255, 0.03);
+        --border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    body {
+        background-color: var(--dark-bg);
+        color: white;
+        font-family: 'Inter', sans-serif;
+    }
+
+    /* Hero Section Gradient Text */
+    .hero-title {
+        font-size: clamp(28px, 6vw, 64px);
+        font-weight: 800;
+        line-height: 1.1;
+        margin-bottom: 20px;
+    }
+
+    .glow-text {
+        background: linear-gradient(90deg, var(--primary-glow), var(--secondary-glow));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* THE GLASS TEMPLATE */
+    .step-card {
+        background: rgba(10, 20, 38, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: 24px;
+        padding: 50px 30px;
+        flex: 1;
+        min-width: 250px;
+        position: relative;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+        text-align: center;
+    }
+
+    .step-card:hover {
+        transform: translateY(-10px);
+        border-color: var(--primary-glow);
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.1);
+    }
+
+    /* Icon Box for Step Cards */
+    .icon-box {
+        width: 70px;
+        height: 70px;
+        background: rgba(0, 210, 255, 0.1);
+        border-radius: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        border: 1px solid rgba(0, 210, 255, 0.3);
+    }
+
+    .icon-box i {
+        font-size: 30px;
+        color: var(--primary-glow);
+        filter: drop-shadow(0 0 8px var(--primary-glow));
+    }
+
+    /* The Glowing Badge (1, 2, 3) */
+    .badge-node {
+        position: absolute;
+        top: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 50px;
+        height: 35px;
+        background: linear-gradient(135deg, var(--primary-glow), #00a8cc);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #050b18;
+        box-shadow: 0 0 15px var(--primary-glow);
+    }
+
+    .step-title {
+        font-size: 28px;
+        margin-bottom: 15px;
+        margin-top: 10px;
+    }
+
+    .step-desc {
+        color: #8892b0;
+        line-height: 1.6;
+        font-size: 16px;
+    }
+
+    /* Tech Badges */
+    .tech-pill {
+        padding: 10px 25px;
+        border-radius: 50px;
+        background: var(--glass-bg);
+        border: 1px solid var(--border-color);
+        color: var(--primary-glow);
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    /* Hero Animations */
+    .hero-fade-in {
+        animation: heroFadeIn 1.2s ease-out;
+    }
+
+    @keyframes heroFadeIn {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .hero-subtitle {
+        animation: heroFadeIn 1.5s ease-out;
+    }
+
+    .hero-btn {
+        animation: heroFadeIn 1.8s ease-out;
+    }
+
+    /* Counter Animation */
+    .stat-number {
+        transition: all 0.3s ease;
+    }
+
+    /* Testimonials */
+    .testimonials-section {
+        width: 100%;
+        max-width: 1100px;
+        padding: 100px 20px;
+    }
+
+    .testimonial-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-top: 60px;
+    }
+
+    .testimonial-card {
+        background: rgba(10, 20, 38, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid var(--border-color);
+        border-radius: 20px;
+        padding: 35px 30px;
+        transition: transform 0.3s ease, border-color 0.3s ease;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-8px);
+        border-color: var(--primary-glow);
+    }
+
+    .testimonial-stars {
+        color: #ffcf33;
+        font-size: 16px;
+        margin-bottom: 15px;
+        letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+        color: #8892b0;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 20px;
+        font-style: italic;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .testimonial-avatar {
+        width: 42px;
+        height: 42px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 16px;
+        color: #050b18;
+    }
+
+    .testimonial-author-name {
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .testimonial-author-role {
+        color: #556;
+        font-size: 12px;
+    }
+
+    /* ===== RESUME SCANNER ANIMATION SECTION ===== */
+    .scanner-section {
+        width: 100%;
+        padding: 100px 20px 60px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .scanner-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        position: relative;
+        min-height: 420px;
+    }
+
+    /* Left: Resume Document */
+    .resume-doc {
+        width: 200px;
+        height: 270px;
+        background: #f0f4f8;
+        border-radius: 8px;
+        padding: 20px 16px;
+        position: relative;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        animation: floatResume 3s ease-in-out infinite;
+        z-index: 2;
+        flex-shrink: 0;
+    }
+
+    @keyframes floatResume {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(15px);
+        }
+    }
+
+    .resume-doc .doc-header {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #00d2ff, #92fe9d);
+        border-radius: 50%;
+        margin: 0 auto 12px;
+    }
+
+    .resume-doc .doc-line {
+        height: 6px;
+        background: #c8d6e5;
+        border-radius: 3px;
+        margin-bottom: 8px;
+    }
+
+    .resume-doc .doc-line.short {
+        width: 60%;
+    }
+
+    .resume-doc .doc-line.medium {
+        width: 80%;
+    }
+
+    .resume-doc .doc-line.long {
+        width: 100%;
+    }
+
+    .resume-doc .doc-line.accent {
+        background: linear-gradient(90deg, #00d2ff55, #92fe9d55);
+    }
+
+    .resume-doc .doc-line-group {
+        display: flex;
+        gap: 6px;
+        margin-bottom: 8px;
+    }
+
+    .resume-doc .doc-line-group .mini-line {
+        height: 5px;
+        background: #dfe6ed;
+        border-radius: 3px;
+        flex: 1;
+    }
+
+    /* Center: The Scanner Machine */
+    .scanner-machine {
+        width: 280px;
+        height: 380px;
+        background: linear-gradient(180deg, #0d1b2a, #1b2838, #0d1b2a);
+        border-radius: 24px;
+        border: 3px solid #1e3a5f;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 25px 20px;
+        box-shadow: 0 0 60px rgba(0, 210, 255, 0.15), inset 0 0 30px rgba(0, 0, 0, 0.5);
+        z-index: 3;
+        flex-shrink: 0;
+    }
+
+    .scanner-machine::before {
+        content: 'VIBEFLOW ATS SCANNER';
+        position: absolute;
+        top: 12px;
+        font-family: 'Courier New', monospace;
+        font-size: 9px;
+        letter-spacing: 3px;
+        color: #00d2ff;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    /* Gauge */
+    .gauge-container {
+        width: 130px;
+        height: 70px;
+        margin-top: 30px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .gauge-bg {
+        width: 130px;
+        height: 65px;
+        border-radius: 65px 65px 0 0;
+        background: conic-gradient(from 180deg at 50% 100%, #ff4b4b 0deg, #ffcf33 60deg, #92fe9d 120deg, #00d2ff 180deg);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .gauge-bg::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 90px;
+        height: 45px;
+        background: #0d1b2a;
+        border-radius: 60px 60px 0 0;
+    }
+
+    .gauge-needle {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 3px;
+        height: 55px;
+        background: linear-gradient(to top, #fff, #00d2ff);
+        transform-origin: bottom center;
+        animation: needleSweep 3s ease-in-out infinite;
+        border-radius: 2px;
+        z-index: 2;
+        box-shadow: 0 0 10px #00d2ff;
+    }
+
+    @keyframes needleSweep {
+        0% {
+            transform: translateX(-50%) rotate(-70deg);
+        }
+
+        50% {
+            transform: translateX(-50%) rotate(55deg);
+        }
+
+        100% {
+            transform: translateX(-50%) rotate(-70deg);
+        }
+    }
+
+    .gauge-score {
+        text-align: center;
+        margin-top: 5px;
+        font-family: 'Courier New', monospace;
+        font-size: 22px;
+        font-weight: bold;
+        color: #92fe9d;
+        text-shadow: 0 0 10px #92fe9d;
+        animation: scoreFlicker 3s ease-in-out infinite;
+    }
+
+    @keyframes scoreFlicker {
+        0% {
+            content: '72';
+        }
+
+        25% {
+            opacity: 0.7;
+        }
+
+        50% {
+            opacity: 1;
+        }
+
+        75% {
+            opacity: 0.7;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    /* Scanner Slot */
+    .scanner-slot {
+        width: 100%;
+        height: 8px;
+        background: #0a1628;
+        border: 1px solid #1e3a5f;
+        border-radius: 4px;
+        margin: 20px 0 15px;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .scanner-slot::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -40%;
+        width: 40%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, #00d2ff, transparent);
+        animation: slotScan 2s ease-in-out infinite;
+    }
+
+    @keyframes slotScan {
+        0% {
+            left: -40%;
+        }
+
+        100% {
+            left: 100%;
+        }
+    }
+
+    /* Status LEDs */
+    .led-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .led {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        animation: ledBlink 1.5s ease-in-out infinite;
+    }
+
+    .led:nth-child(1) {
+        background: #00d2ff;
+        box-shadow: 0 0 6px #00d2ff;
+        animation-delay: 0s;
+    }
+
+    .led:nth-child(2) {
+        background: #92fe9d;
+        box-shadow: 0 0 6px #92fe9d;
+        animation-delay: 0.3s;
+    }
+
+    .led:nth-child(3) {
+        background: #ffcf33;
+        box-shadow: 0 0 6px #ffcf33;
+        animation-delay: 0.6s;
+    }
+
+    .led:nth-child(4) {
+        background: #00d2ff;
+        box-shadow: 0 0 6px #00d2ff;
+        animation-delay: 0.9s;
+    }
+
+    .led:nth-child(5) {
+        background: #92fe9d;
+        box-shadow: 0 0 6px #92fe9d;
+        animation-delay: 1.2s;
+    }
+
+    @keyframes ledBlink {
+
+        0%,
+        100% {
+            opacity: 0.3;
+        }
+
+        50% {
+            opacity: 1;
+        }
+    }
+
+    /* Terminal Output in Machine */
+    .machine-terminal {
+        width: 100%;
+        background: #060e1a;
+        border: 1px solid #1e3a5f;
+        border-radius: 8px;
+        padding: 12px;
+        font-family: 'Courier New', monospace;
+        font-size: 10px;
+        color: #92fe9d;
+        flex: 1;
+        overflow: hidden;
+    }
+
+    .machine-terminal .term-line {
+        margin-bottom: 4px;
+        opacity: 0;
+        animation: typeLine 4s ease-in-out infinite;
+    }
+
+    .machine-terminal .term-line:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .machine-terminal .term-line:nth-child(2) {
+        animation-delay: 0.5s;
+    }
+
+    .machine-terminal .term-line:nth-child(3) {
+        animation-delay: 1s;
+    }
+
+    .machine-terminal .term-line:nth-child(4) {
+        animation-delay: 1.5s;
+    }
+
+    .machine-terminal .term-line:nth-child(5) {
+        animation-delay: 2s;
+    }
+
+    @keyframes typeLine {
+        0% {
+            opacity: 0;
+        }
+
+        15% {
+            opacity: 1;
+        }
+
+        85% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0.4;
+        }
+    }
+
+    .term-line .highlight {
+        color: #00d2ff;
+    }
+
+    .term-line .warning {
+        color: #ffcf33;
+    }
+
+    .term-line .success {
+        color: #92fe9d;
+    }
+
+    /* Right: Graded Report */
+    .graded-report {
+        width: 200px;
+        height: 270px;
+        background: linear-gradient(135deg, #0d1b2a, #132743);
+        border-radius: 8px;
+        padding: 20px 16px;
+        position: relative;
+        border: 1px solid #1e3a5f;
+        box-shadow: 0 10px 40px rgba(0, 210, 255, 0.15);
+        animation: floatReport 3s ease-in-out infinite;
+        z-index: 2;
+        flex-shrink: 0;
+    }
+
+    @keyframes floatReport {
+
+        0%,
+        100% {
+            transform: translateX(0);
+        }
+
+        50% {
+            transform: translateX(-15px);
+        }
+    }
+
+    .graded-report .report-badge {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #00d2ff, #92fe9d);
+        border-radius: 50%;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 20px;
+        color: #050b18;
+        box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        animation: pulseBadge 2s ease-in-out infinite;
+    }
+
+    @keyframes pulseBadge {
+
+        0%,
+        100% {
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.4);
+        }
+
+        50% {
+            box-shadow: 0 0 35px rgba(0, 210, 255, 0.7);
+        }
+    }
+
+    .graded-report .report-label {
+        text-align: center;
+        font-size: 11px;
+        color: #92fe9d;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+    }
+
+    .graded-report .report-bar {
+        height: 6px;
+        border-radius: 3px;
+        margin-bottom: 8px;
+        background: #1e3a5f;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .graded-report .report-bar .fill {
+        height: 100%;
+        border-radius: 3px;
+        animation: fillBar 2.5s ease-in-out infinite;
+    }
+
+    .graded-report .report-bar .fill.green {
+        background: linear-gradient(90deg, #92fe9d, #00d2ff);
+    }
+
+    .graded-report .report-bar .fill.yellow {
+        background: linear-gradient(90deg, #ffcf33, #ffa502);
+    }
+
+    .graded-report .report-bar .fill.cyan {
+        background: linear-gradient(90deg, #00d2ff, #92fe9d);
+    }
+
+    @keyframes fillBar {
+        0% {
+            width: 0%;
+        }
+
+        40% {
+            width: var(--fill-width);
+        }
+
+        100% {
+            width: var(--fill-width);
+        }
+    }
+
+    .graded-report .bar-label {
+        font-size: 9px;
+        color: #556;
+        margin-bottom: 3px;
+        font-family: 'Courier New', monospace;
+    }
+
+    /* Connection Lines (Arrows) */
+    .connector {
+        width: 40px;
+        height: 4px;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
+    }
+
+    .connector .flow-dot {
+        width: 8px;
+        height: 8px;
+        background: #00d2ff;
+        border-radius: 50%;
+        position: absolute;
+        top: -2px;
+        box-shadow: 0 0 10px #00d2ff;
+    }
+
+    .connector.left .flow-dot {
+        animation: flowRight 2s ease-in-out infinite;
+    }
+
+    .connector.right .flow-dot {
+        animation: flowRight 2s ease-in-out infinite;
+        animation-delay: 1s;
+    }
+
+    @keyframes flowRight {
+        0% {
+            left: 0;
+            opacity: 0;
+        }
+
+        20% {
+            opacity: 1;
+        }
+
+        80% {
+            opacity: 1;
+        }
+
+        100% {
+            left: 100%;
+            opacity: 0;
+        }
+    }
+
+    .connector::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: repeating-linear-gradient(90deg, #1e3a5f 0px, #1e3a5f 4px, transparent 4px, transparent 8px);
+        border-radius: 2px;
+    }
+
+    /* Floating particles */
+    .scanner-section .particle {
+        position: absolute;
+        width: 4px;
+        height: 4px;
+        background: #00d2ff;
+        border-radius: 50%;
+        opacity: 0;
+        animation: particleFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes particleFloat {
+        0% {
+            transform: translateY(0);
+            opacity: 0;
+        }
+
+        20% {
+            opacity: 0.6;
+        }
+
+        80% {
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translateY(-80px);
+            opacity: 0;
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 36px !important;
+        }
+
+        .step-title {
+            font-size: 22px;
+        }
+
+        .step-card {
+            padding: 40px 20px;
+            flex: none;
+            width: 100%;
+        }
+
+        .testimonials-section {
+            padding: 60px 15px;
+        }
+
+        .testimonial-grid {
+            grid-template-columns: 1fr;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .scanner-section {
+            padding: 60px 15px 40px;
+            overflow: hidden;
+        }
+
+        .scanner-wrapper {
+            flex-direction: column;
+            gap: 15px;
+            min-height: auto;
+        }
+
+        .connector {
+            width: 4px;
+            height: 30px;
+        }
+
+        .connector .flow-dot {
+            animation-name: flowDown !important;
+        }
+
+        @keyframes flowDown {
+            0% {
+                top: 0;
+                left: 0;
+                opacity: 0;
+            }
+
+            20% {
+                opacity: 1;
+            }
+
+            80% {
+                opacity: 1;
+            }
+
+            100% {
+                top: 100%;
+                left: 0;
+                opacity: 0;
+            }
+        }
+
+        .connector::after {
+            background: repeating-linear-gradient(180deg, #1e3a5f 0px, #1e3a5f 4px, transparent 4px, transparent 8px);
+        }
+
+        .resume-doc {
+            width: 160px;
+            height: 210px;
+            padding: 15px 12px;
+            animation: none;
+        }
+
+        .resume-doc .doc-header {
+            width: 38px;
+            height: 38px;
+            margin-bottom: 8px;
+        }
+
+        .scanner-machine {
+            width: 220px;
+            height: 300px;
+            padding: 20px 15px;
+        }
+
+        .scanner-machine::before {
+            font-size: 7px;
+            letter-spacing: 2px;
+        }
+
+        .gauge-container {
+            width: 100px;
+            height: 55px;
+            margin-top: 20px;
+        }
+
+        .gauge-bg {
+            width: 100px;
+            height: 50px;
+            border-radius: 50px 50px 0 0;
+        }
+
+        .gauge-bg::after {
+            width: 70px;
+            height: 35px;
+            border-radius: 45px 45px 0 0;
+        }
+
+        .gauge-needle {
+            height: 42px;
+        }
+
+        .gauge-score {
+            font-size: 16px;
+        }
+
+        .machine-terminal {
+            font-size: 8px;
+            padding: 8px;
+        }
+
+        .graded-report {
+            width: 160px;
+            height: 210px;
+            padding: 15px 12px;
+            animation: none;
+        }
+
+        .graded-report .report-badge {
+            width: 45px;
+            height: 45px;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .graded-report .report-label {
+            font-size: 9px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .graded-report .bar-label {
+            font-size: 8px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 28px !important;
+        }
+
+        .resume-doc {
+            width: 140px;
+            height: 180px;
+        }
+
+        .scanner-machine {
+            width: 200px;
+            height: 270px;
+            padding: 15px 12px;
+        }
+
+        .graded-report {
+            width: 140px;
+            height: 180px;
+        }
+    }
+</style>
+
+<div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+
+    <div style="width: 100%; max-width: 1000px; padding: 80px 20px; text-align: center;">
+        <h1 class="hero-title hero-fade-in">
+            Elevate Your Career with <br>
+            <span class="glow-text">AI Precision</span>
+        </h1>
+        <p class="hero-subtitle" style="font-size: 20px; color: #8892b0; margin-bottom: 40px;">
+            Bridge the Gap Between Your Talent and the Recruiter's Desktop
+        </p>
+        <button class="btn-primary hero-btn" style="padding: 18px 50px; border-radius: 50px; font-weight: bold;"
+            onclick="location.href='/dashboard'">
+            Analyze Your Resume Now
+        </button>
+    </div>
+
+    <div
+        style="width: 100%; background: rgba(255,255,255,0.01); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding: 60px 0;">
+        <div
+            style="display: flex; justify-content: space-around; max-width: 1100px; margin: auto; flex-wrap: wrap; gap: 20px;">
+            <div style="text-align: center;">
+                <h2 class="stat-number" data-target="10000" data-suffix="+" style="color: var(--primary-glow); margin: 0; font-size: 40px;">0</h2>
+                <p style="color: #64ffda; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">Resumes Scanned</p>
+            </div>
+            <div style="text-align: center;">
+                <h2 class="stat-number" data-target="98" data-suffix="%" style="color: #92fe9d; margin: 0; font-size: 40px;">0</h2>
+                <p style="color: #64ffda; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">ATS Accuracy</p>
+            </div>
+            <div style="text-align: center;">
+                <h2 class="stat-number" data-target="3" data-suffix="+" style="color: var(--primary-glow); margin: 0; font-size: 40px;">0</h2>
+                <p style="color: #64ffda; font-size: 12px; letter-spacing: 2px; text-transform: uppercase;">AI Models</p>
+            </div>
+        </div>
+    </div>
+
+    <div style="width: 100%; max-width: 1100px; padding: 80px 20px;">
+        <h2 style="font-size: clamp(28px, 5vw, 42px); text-align: center; margin-bottom: 60px;">How It <span
+                style="color: var(--primary-glow)">Works</span></h2>
+
+        <div style="display: flex; gap: 30px; justify-content: center; flex-wrap: wrap;">
+
+            <div class="step-card">
+                <div class="badge-node">1</div>
+                <div class="icon-box"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+                <h3 class="step-title">Upload</h3>
+                <p class="step-desc">Drop your PDF resume into our secure, encrypted AI analyzer for instant processing.
+                </p>
+            </div>
+
+            <div class="step-card">
+                <div class="badge-node">2</div>
+                <div class="icon-box"><i class="fa-solid fa-microchip"></i></div>
+                <h3 class="step-title">Scan</h3>
+                <p class="step-desc">Our Neural Network identifies key technical skills and highlights critical missing
+                    keywords.</p>
+            </div>
+
+            <div class="step-card">
+                <div class="badge-node">3</div>
+                <div class="icon-box"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <h3 class="step-title">Optimize</h3>
+                <p class="step-desc">Download a comprehensive AI-generated report designed to bypass corporate ATS
+                    filters.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <div style="width: 100%; padding: 80px 0; background: rgba(0,0,0,0.2);">
+        <div style="max-width: 1100px; margin: auto; text-align: center;">
+            <p
+                style="color: #8892b0; margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase; font-size: 14px;">
+                Powered By Industry Leading Tech</p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px;">
+                {% set techs = ["Python", "Flask", "Ollama", "Llama 3", "PyMuPDF", "SQLite", "Glass UI"] %}
+                {% for tech in techs %}
+                <span class="tech-pill">{{ tech }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== TESTIMONIALS SECTION ===== -->
+    <div class="testimonials-section">
+        <h2 style="font-size: clamp(28px, 5vw, 42px); text-align: center;">What <span style="color: var(--primary-glow);">Students</span> Say</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"VibeFlow completely transformed my resume. I went from getting zero callbacks to landing 3 interviews in one week. The ATS scoring is incredibly accurate!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #00d2ff, #92fe9d);">R</div>
+                    <div>
+                        <div class="testimonial-author-name">Rahul Patel</div>
+                        <div class="testimonial-author-role">MCA Student, GTU</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★★</div>
+                <p class="testimonial-text">"The AI suggestions were spot-on. It found missing keywords I never thought of. Got placed at TCS within 2 months of using VibeFlow!"</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #92fe9d, #ffcf33);">P</div>
+                    <div>
+                        <div class="testimonial-author-name">Priya Sharma</div>
+                        <div class="testimonial-author-role">B.Tech CSE, LPU</div>
+                    </div>
+                </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-stars">★★★★☆</div>
+                <p class="testimonial-text">"Best free ATS checker I've found. The company-specific analysis for Microsoft and Infosys resume formats is a game changer for freshers."</p>
+                <div class="testimonial-author">
+                    <div class="testimonial-avatar" style="background: linear-gradient(135deg, #ffcf33, #00d2ff);">K</div>
+                    <div>
+                        <div class="testimonial-author-name">Karan Mehta</div>
+                        <div class="testimonial-author-role">MBA Grad, Nirma University</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== RESUME SCANNER ANIMATION ===== -->
+    <div class="scanner-section">
+        <!-- Floating Particles -->
+        <div class="particle" style="left: 10%; top: 30%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 25%; top: 60%; animation-delay: 1s; background: #92fe9d;"></div>
+        <div class="particle" style="left: 70%; top: 40%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 85%; top: 70%; animation-delay: 0.5s; background: #92fe9d;"></div>
+        <div class="particle" style="left: 50%; top: 80%; animation-delay: 1.5s;"></div>
+        <div class="particle" style="left: 40%; top: 20%; animation-delay: 3s; background: #ffcf33;"></div>
+
+        <h2 style="font-size: clamp(28px, 5vw, 42px); text-align: center; margin-bottom: 40px;">See the <span
+                style="color: var(--primary-glow);">AI Scanner</span> in Action</h2>
+
+        <div class="scanner-wrapper">
+            <!-- LEFT: Resume Document -->
+            <div class="resume-doc">
+                <div class="doc-header"></div>
+                <div class="doc-line long accent"></div>
+                <div class="doc-line medium"></div>
+                <div class="doc-line short"></div>
+                <div class="doc-line-group">
+                    <div class="mini-line"></div>
+                    <div class="mini-line"></div>
+                    <div class="mini-line"></div>
+                </div>
+                <div class="doc-line long"></div>
+                <div class="doc-line medium"></div>
+                <div class="doc-line-group">
+                    <div class="mini-line"></div>
+                    <div class="mini-line"></div>
+                </div>
+                <div class="doc-line short"></div>
+                <div class="doc-line long accent"></div>
+                <div class="doc-line medium"></div>
+            </div>
+
+            <!-- CONNECTOR LEFT -->
+            <div class="connector left">
+                <div class="flow-dot"></div>
+            </div>
+
+            <!-- CENTER: Scanner Machine -->
+            <div class="scanner-machine">
+                <!-- Gauge -->
+                <div class="gauge-container">
+                    <div class="gauge-bg"></div>
+                    <div class="gauge-needle"></div>
+                </div>
+                <div class="gauge-score">87/100</div>
+
+                <!-- Scanner Slot -->
+                <div class="scanner-slot"></div>
+
+                <!-- LED Row -->
+                <div class="led-row">
+                    <div class="led"></div>
+                    <div class="led"></div>
+                    <div class="led"></div>
+                    <div class="led"></div>
+                    <div class="led"></div>
+                </div>
+
+                <!-- Terminal -->
+                <div class="machine-terminal">
+                    <div class="term-line"><span class="highlight">&gt;</span> Parsing resume.pdf...</div>
+                    <div class="term-line"><span class="highlight">&gt;</span> Extracting <span class="success">12
+                            skills</span> found</div>
+                    <div class="term-line"><span class="highlight">&gt;</span> ATS match: <span
+                            class="success">87%</span></div>
+                    <div class="term-line"><span class="highlight">&gt;</span> Missing: <span class="warning">Docker,
+                            AWS</span></div>
+                    <div class="term-line"><span class="highlight">&gt;</span> Report <span class="success">READY</span>
+                        ✓</div>
+                </div>
+            </div>
+
+            <!-- CONNECTOR RIGHT -->
+            <div class="connector right">
+                <div class="flow-dot"></div>
+            </div>
+
+            <!-- RIGHT: Graded Report -->
+            <div class="graded-report">
+                <div class="report-badge">A+</div>
+                <div class="report-label">ATS Score</div>
+
+                <div class="bar-label">Skills Match</div>
+                <div class="report-bar">
+                    <div class="fill green" style="--fill-width: 87%;"></div>
+                </div>
+
+                <div class="bar-label">Keywords</div>
+                <div class="report-bar">
+                    <div class="fill cyan" style="--fill-width: 72%;"></div>
+                </div>
+
+                <div class="bar-label">Formatting</div>
+                <div class="report-bar">
+                    <div class="fill green" style="--fill-width: 95%;"></div>
+                </div>
+
+                <div class="bar-label">Experience</div>
+                <div class="report-bar">
+                    <div class="fill yellow" style="--fill-width: 60%;"></div>
+                </div>
+
+                <div class="bar-label">Education</div>
+                <div class="report-bar">
+                    <div class="fill cyan" style="--fill-width: 80%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <p style="text-align: center; color: #556; font-size: 14px; margin-top: 40px; font-style: italic;">
+            Your resume goes in → AI scans & grades → Optimized report comes out
+        </p>
+    </div>
+
+    <div style="width: 100%; max-width: 1100px; padding: clamp(60px, 10vw, 120px) 20px;">
+        <div class="step-card"
+            style="padding: clamp(40px, 8vw, 80px) clamp(20px, 5vw, 40px); background: linear-gradient(135deg, rgba(0,210,255,0.05), rgba(146,254,157,0.05));">
+            <h2 style="font-size: clamp(24px, 6vw, 36px); margin-bottom: 20px;">Ready to land your dream job?</h2>
+            <p style="color: #8892b0; margin-bottom: 40px;">Join thousands of students using VIBEFLOW.</p>
+            <button class="btn-primary" style="padding: 15px 45px; border-radius: 50px;"
+                onclick="location.href='/register'">Create Free Account</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+// Count-up animation for stats
+function animateCounters() {
+    const counters = document.querySelectorAll('.stat-number');
+    counters.forEach(counter => {
+        const target = parseInt(counter.getAttribute('data-target'));
+        const suffix = counter.getAttribute('data-suffix') || '';
+        const duration = 2000;
+        const step = target / (duration / 16);
+        let current = 0;
+
+        const updateCounter = () => {
+            current += step;
+            if (current < target) {
+                counter.textContent = Math.floor(current).toLocaleString() + suffix;
+                requestAnimationFrame(updateCounter);
+            } else {
+                counter.textContent = target >= 10000 ? (target/1000).toFixed(0) + 'k' + suffix : target + suffix;
+            }
+        };
+        updateCounter();
+    });
+}
+
+// Trigger counter when stats section is visible
+const statsSection = document.querySelector('.stat-number');
+if (statsSection) {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                observer.disconnect();
+            }
+        });
+    }, { threshold: 0.5 });
+    observer.observe(statsSection.parentElement.parentElement);
+}
+</script>
+
+{% endblock %}

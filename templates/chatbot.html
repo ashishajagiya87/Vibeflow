@@ -1,0 +1,206 @@
+<!-- VibeFlow Chatbot Widget -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+    /* --- Robot Toggle Button --- */
+    .chat-toggle {
+        position: fixed;
+        bottom: 25px;
+        right: 25px;
+        width: 65px;
+        height: 65px;
+        background: var(--primary, #007bff);
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(0, 123, 255, 0.4);
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .chat-toggle:hover { transform: scale(1.1) rotate(5deg); }
+
+    /* --- Compact Chat Window --- */
+    .chat-container {
+        position: fixed;
+        bottom: 100px;
+        right: 25px;
+        width: 330px; 
+        height: 500px;
+        max-height: calc(100vh - 150px);
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(25px);
+        -webkit-backdrop-filter: blur(25px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 28px;
+        display: none;
+        flex-direction: column;
+        box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+        z-index: 9999;
+        overflow: hidden;
+        animation: chatSlide 0.4s ease-out;
+    }
+
+    @keyframes chatSlide {
+        from { opacity: 0; transform: translateY(30px) scale(0.9); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* --- Header --- */
+    .chat-header {
+        padding: 18px 20px;
+        background: rgba(255, 255, 255, 0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .header-brand {
+        color: white; font-weight: 600; font-size: 0.85rem;
+        display: flex; align-items: center; gap: 8px;
+    }
+
+    .status-pulse {
+        width: 8px; height: 8px; background: #22c55e;
+        border-radius: 50%; box-shadow: 0 0 10px #22c55e;
+    }
+
+    /* --- Messages Area --- */
+    .chat-messages {
+        flex: 1;
+        padding: 20px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .chat-messages::-webkit-scrollbar { width: 4px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+
+    .message {
+        padding: 12px 16px;
+        border-radius: 18px;
+        font-size: 0.85rem;
+        max-width: 80%;
+        line-height: 1.5;
+        color: #e2e8f0;
+        animation: msgPop 0.3s ease;
+    }
+
+    .message.bot { background: rgba(255, 255, 255, 0.07); border-bottom-left-radius: 4px; }
+    .message.user { background: var(--primary, #007bff); align-self: flex-end; border-bottom-right-radius: 4px; }
+
+    /* --- Input Area --- */
+    .chat-input {
+        padding: 18px;
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        gap: 10px;
+    }
+
+    .chat-input input {
+        flex: 1; background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255,255,255,0.1);
+        padding: 12px 15px; border-radius: 14px;
+        color: white; font-size: 0.85rem; outline: none;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .chat-input button {
+        background: white; color: black; border: none;
+        padding: 0 18px; border-radius: 14px;
+        font-weight: 600; cursor: pointer; transition: 0.3s;
+    }
+
+    .chat-input button:hover { background: var(--primary, #007bff); color: white; }
+
+    @keyframes msgPop { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+</style>
+
+<button class="chat-toggle" onclick="toggleChat()" id="toggleBtn">
+    <svg width="45" height="45" viewBox="0 0 100 100">
+        <rect x="25" y="35" width="50" height="40" rx="10" fill="white"/>
+        <circle cx="40" cy="50" r="5" fill="#00d2ff"/>
+        <circle cx="60" cy="50" r="5" fill="#00d2ff"/>
+        <line x1="50" y1="35" x2="50" y2="20" stroke="white" stroke-width="4"/>
+        <circle cx="50" cy="18" r="6" fill="#22c55e"/>
+        <rect x="42" y="62" width="16" height="3" rx="2" fill="#cbd5e1"/>
+    </svg>
+</button>
+
+<div class="chat-container" id="chatWindow">
+    <div class="chat-header">
+        <div class="header-brand"><div class="status-pulse"></div> VIBEFLOW AI</div>
+        <div style="cursor:pointer; color:#64748b; font-size:18px;" onclick="toggleChat()">✕</div>
+    </div>
+    <div class="chat-messages" id="chatMsgs">
+        <div class="message bot">Hello! I'm VibeFlow AI. Ask me anything about resumes & ATS! 🤖</div>
+    </div>
+    <div class="chat-input">
+        <input type="text" id="userInput" placeholder="Ask about your resume..." onkeypress="if(event.key==='Enter') sendMsg()">
+        <button onclick="sendMsg()">SEND</button>
+    </div>
+</div>
+
+<script>
+    const chatWindow = document.getElementById("chatWindow");
+    const toggleBtn = document.getElementById("toggleBtn");
+    const msgArea = document.getElementById("chatMsgs");
+    const inputField = document.getElementById("userInput");
+
+    function toggleChat() {
+        const isOpen = chatWindow.style.display === "flex";
+        chatWindow.style.display = isOpen ? "none" : "flex";
+        
+        if (!isOpen) {
+            toggleBtn.innerHTML = '<span style="color:white; font-size:28px; font-weight:bold;">✕</span>';
+            toggleBtn.style.background = "#1e293b";
+            inputField.focus();
+        } else {
+            toggleBtn.innerHTML = `<svg width="45" height="45" viewBox="0 0 100 100"><rect x="25" y="35" width="50" height="40" rx="10" fill="white"/><circle cx="40" cy="50" r="5" fill="#00d2ff"/><circle cx="60" cy="50" r="5" fill="#00d2ff"/><line x1="50" y1="35" x2="50" y2="20" stroke="white" stroke-width="4"/><circle cx="50" cy="18" r="6" fill="#22c55e"/><rect x="42" y="62" width="16" height="3" rx="2" fill="#cbd5e1"/></svg>`;
+            toggleBtn.style.background = "var(--primary, #007bff)";
+        }
+    }
+
+    async function sendMsg() {
+        const text = inputField.value.trim();
+        if (!text) return;
+
+        addMessage(text, 'user');
+        inputField.value = "";
+
+        const botMsgDiv = document.createElement("div");
+        botMsgDiv.className = "message bot";
+        botMsgDiv.innerText = "Thinking...";
+        msgArea.appendChild(botMsgDiv);
+        msgArea.scrollTop = msgArea.scrollHeight;
+
+        try {
+            const response = await fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: text }),
+            });
+
+            const data = await response.json();
+            botMsgDiv.innerText = data.reply; 
+        } catch (error) {
+            botMsgDiv.innerText = "Error: Could not connect to AI.";
+        }
+        msgArea.scrollTop = msgArea.scrollHeight;
+    }
+
+    function addMessage(text, type) {
+        const div = document.createElement("div");
+        div.className = `message ${type}`;
+        div.innerText = text;
+        msgArea.appendChild(div);
+        msgArea.scrollTop = msgArea.scrollHeight;
+    }
+</script>

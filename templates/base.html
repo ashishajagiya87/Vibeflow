@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Vibe Flow | AI Resume Analyzer</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary: #00d2ff;
+            --secondary: #3a7bd5;
+            --bg: #050b18;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at top right, #102544, #050b18);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            filter: blur(150px);
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .navbar {
+            backdrop-filter: blur(15px);
+            background: rgba(15, 28, 52, 0.7);
+            border-bottom: 1px solid var(--border);
+            padding: 15px 80px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 26px;
+            font-weight: 900;
+            background: linear-gradient(to right, #00d2ff, #92fe9d);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 1px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #ccc;
+            text-decoration: none;
+            margin-left: 30px;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+            text-shadow: 0 0 10px var(--primary);
+        }
+
+        .nav-links a.active {
+            color: var(--primary);
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 3px;
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 5px;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            width: 28px;
+            height: 3px;
+            background: white;
+            border-radius: 3px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 260px;
+                height: 100vh;
+                background: #050b18;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 80px 30px 30px;
+                transition: right 0.4s ease;
+                z-index: 1000;
+                border-left: 1px solid var(--border);
+                box-shadow: -5px 0 30px rgba(0,0,0,0.5);
+            }
+            .nav-links.open { right: 0; }
+            .nav-links a { margin: 0; padding: 15px 0; border-bottom: 1px solid var(--border); display: block; width: 100%; }
+            .navbar { padding: 15px 20px; }
+        }
+
+        .main-content {
+            padding: 60px 20px;
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+        }
+
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            padding: 12px 30px;
+            color: white;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 15px 30px rgba(0, 210, 255, 0.5);
+            transform: scale(1.05);
+        }
+
+        .footer-main {
+            background: rgba(15, 28, 52, 0.9);
+            backdrop-filter: blur(10px);
+            border-top: 1px solid var(--border);
+            padding: 60px 80px 20px 80px;
+            margin-top: auto;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-section h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-size: 18px;
+            position: relative;
+        }
+
+        .footer-section h3::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 30px;
+            height: 2px;
+            background: var(--primary);
+        }
+
+        .footer-section p {
+            color: #888;
+            line-height: 1.6;
+            font-size: 14px;
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: #888;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            color: #555;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .footer-main {
+                padding: 40px 20px 15px 20px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .main-content {
+                padding: 30px 10px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar">
+        <div class="logo">VibeFlow</div>
+        <div class="hamburger" onclick="document.querySelector('.nav-links').classList.toggle('open')">
+            <span></span><span></span><span></span>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/about">About</a>
+            {% if session['user'] %}
+            <a href="/dashboard">Dashboard</a>
+            <a href="/logout">Logout</a>
+            {% else %}
+            <a href="/login">Login</a>
+            <a href="/register">Register</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <div class="main-content">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="footer-main">
+        <div class="footer-grid">
+            <div class="footer-section">
+                <h3 style="color: var(--primary);">Vibe Flow</h3>
+                <p>AI-powered resume analysis platform engineered to bridge the gap between talented job seekers and
+                    complex ATS systems.</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/dashboard">Dashboard</a></li>
+                    <li><a href="/admin">Admin Control</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Support & Contact</h3>
+                <p>Email: ashishajagiya87@gmail.com</p>
+                <p>Hours: 24/7 Support</p>
+                <p>Location: Ahmedabad, India</p>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 Vibe Flow | Developed by Aashish
+        </div>
+    </footer>
+    {% include "chatbot.html" %}
+
+<script>
+// Active nav link
+const navLinks = document.querySelectorAll('.nav-links a');
+navLinks.forEach(link => {
+    if (link.getAttribute('href') === window.location.pathname) {
+        link.classList.add('active');
+    }
+});
+</script>
+</body>
+
+</html>

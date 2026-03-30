@@ -1,0 +1,9 @@
+
+body { font-family: Arial; background:#0f172a; color:white; text-align:center; }
+.navbar { display:flex; justify-content:space-between; padding:20px; background:#111827; }
+.nav-links a { color:white; margin:0 10px; text-decoration:none; }
+.card { margin:100px auto; padding:30px; width:400px; background:#1e293b; border-radius:10px; }
+input, button { width:100%; padding:10px; margin:10px 0; }
+button { background:orange; border:none; font-weight:bold; }
+.btn { background:orange; padding:15px 30px; text-decoration:none; color:black; }
+

@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+    @media (max-width: 768px) {
+        .glass-card {
+            padding: 25px 15px !important;
+            margin-top: 10px !important;
+        }
+
+        .glass-card h1 {
+            font-size: 26px !important;
+        }
+
+        #drop-zone {
+            padding: 40px 15px !important;
+        }
+    }
+</style>
+
+<div id="loading-overlay"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:#050b18; z-index:9999;">
+    <iframe src="/loading" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
+<div class="glass-card" style="width: 100%; max-width: 900px; padding: 50px; margin-top: 20px;">
+
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1
+            style="margin: 0; background: linear-gradient(to right, #00d2ff, #92fe9d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; font-size: 36px;">
+            AI Resume Analyzer
+        </h1>
+        <p style="color: #888; margin-top: 10px;">Upload your resume to get instant ATS feedback and scoring.</p>
+    </div>
+
+    <form id="resumeForm" action="/upload" method="POST" enctype="multipart/form-data"
+        style="display: flex; flex-direction: column; gap: 25px;">
+
+        <div id="drop-zone"
+            style="border: 2px dashed rgba(0, 210, 255, 0.4); width: 100%; padding: 60px 20px; border-radius: 20px; text-align: center; background: rgba(255,255,255,0.02); transition: 0.3s; cursor: pointer; position: relative;">
+            <div id="drop-icon"
+                style="font-size: 50px; margin-bottom: 15px; filter: drop-shadow(0 0 10px rgba(0,210,255,0.5));">📄
+            </div>
+            <p id="file-name" style="color: #aaa; font-size: 16px; margin: 0;">
+                Drag & Drop your PDF here or <span style="color: #00d2ff; font-weight: bold;">Browse</span>
+            </p>
+            <input type="file" name="resume" id="resumeInput" required
+                style="position: absolute; width: 100%; height: 100%; top: 0; left: 0; opacity: 0; cursor: pointer;">
+        </div>
+
+        <div style="text-align: left;">
+            <label style="color: #888; font-size: 13px; margin-left: 5px; margin-bottom: 8px; display: block;">Choose AI
+                Analysis Engine</label>
+            <select name="model"
+                style="width: 100%; padding: 15px; background: #0f1c34; color: white; border: 1px solid var(--border); border-radius: 12px; outline: none; cursor: pointer; font-size: 15px;">
+
+                <option value="ats">⚡ Standard ATS Logic (Fast)</option>
+
+                {% for key,value in models.items() %}
+                <option value="{{key}}">🤖 AI: {{value}}</option>
+                {% endfor %}
+
+                <option disabled>──────── Company Resume Comparison ────────</option>
+
+                <option value="infosys">🏢 Infosys Resume Standard</option>
+                <option value="microsoft">🏢 Microsoft Resume Standard</option>
+                <option value="apple">🏢 Apple Resume Standard</option>
+                <option value="google">🏢 Google Resume Standard</option>
+                <option value="amazon">🏢 Amazon Resume Standard</option>
+                <option value="meta">🏢 Meta Resume Standard</option>
+                <option value="netflix">🏢 Netflix Resume Standard</option>
+                <option value="ibm">🏢 IBM Resume Standard</option>
+                <option value="oracle">🏢 Oracle Resume Standard</option>
+                <option value="adobe">🏢 Adobe Resume Standard</option>
+                <option value="intel">🏢 Intel Resume Standard</option>
+                <option value="salesforce">🏢 Salesforce Resume Standard</option>
+                <option value="cisco">🏢 Cisco Resume Standard</option>
+
+            </select>
+        </div>
+
+        <button type="submit" class="btn-primary"
+            style="width: 100%; padding: 18px; font-size: 18px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0, 210, 255, 0.2);">
+            Run Analysis
+        </button>
+    </form>
+
+    {% if result %}
+    <div
+        style="margin-top: 60px; text-align: left; border-top: 1px solid var(--border); padding-top: 40px; animation: fadeIn 0.8s ease-in-out;">
+        <div style="display: flex; align-items: center; gap: 30px; flex-wrap: wrap; justify-content: center;">
+            <div style="width: 150px; min-width: 120px;">
+                <canvas id="scoreChart"></canvas>
+            </div>
+            <div style="text-align: center;">
+                <h1 style="margin: 0; color: #92fe9d; font-size: clamp(32px, 8vw, 48px);">{{score}}%</h1>
+                <p style="color: #888; margin: 5px 0;">ATS Compatibility Score</p>
+                <a href="/download_report?score={{score}}&feedback={{result | urlencode}}" class="btn-primary"
+                    style="text-decoration: none; display: inline-block; padding: 10px 25px; margin-top: 15px; font-size: 14px; background: #1fb67a;">
+                    📥 Download PDF Report
+                </a>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 45px; color: var(--primary);">Detailed Analysis</h3>
+        <div
+            style="background: rgba(0,0,0,0.3); padding: 25px; border-radius: 15px; border-left: 4px solid var(--primary);">
+            <pre
+                style="white-space: pre-wrap; margin: 0; font-family: 'Courier New', monospace; color: #eee; line-height: 1.6;">{{result}}</pre>
+        </div>
+
+        <h3 style="margin-top: 40px; color: var(--primary);">Detected Skills</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            {% for skill in skills %}
+            <span
+                style="background: rgba(0,210,255,0.1); color: var(--primary); padding: 8px 18px; border-radius: 30px; font-weight: bold; font-size: 12px; border: 1px solid rgba(0,210,255,0.3);">
+                {{skill.upper()}}
+            </span>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        var score = Number("{{score}}");
+        new Chart(document.getElementById("scoreChart"), {
+            type: "doughnut",
+            data: {
+                datasets: [{
+                    data: [score, 100 - score],
+                    backgroundColor: ['#00d2ff', 'rgba(255,255,255,0.05)'],
+                    borderWidth: 0
+                }]
+            },
+            options: { cutout: '80%', plugins: { tooltip: { enabled: false } } }
+        });
+    </script>
+    {% endif %}
+</div>
+
+<script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('resumeInput');
+    const fileNameDisplay = document.getElementById('file-name');
+
+    fileInput.addEventListener('change', function () {
+        if (this.files.length > 0) {
+            fileNameDisplay.innerHTML = "Selected: <b style='color: #92fe9d;'>" + this.files[0].name + "</b>";
+            dropZone.style.borderColor = "#92fe9d";
+            dropZone.style.background = "rgba(146, 254, 157, 0.05)";
+        }
+    });
+
+    dropZone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        dropZone.style.borderColor = "#00d2ff";
+        dropZone.style.background = "rgba(0, 210, 255, 0.05)";
+    });
+
+    dropZone.addEventListener('dragleave', () => {
+        dropZone.style.borderColor = "rgba(0, 210, 255, 0.4)";
+        dropZone.style.background = "rgba(255,255,255,0.02)";
+    });
+
+    document.getElementById("resumeForm").addEventListener("submit", function (e) {
+        document.getElementById("loading-overlay").style.display = "block";
+
+        // small delay so loader appears before backend processing
+        setTimeout(() => {
+            this.submit();
+        }, 100);
+
+        e.preventDefault();
+    });
+</script>
+
+<style>
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+{% endblock %}
