@@ -46,7 +46,7 @@ AVAILABLE_MODELS = {
     "smart": "llama3"
 }
 
-# 14 HIGH-PROFILE COMPANY RESUME TEMPLATES
+# COMPANY RESUME TEMPLATES
 
 company_templates = {
     "tcs": [
