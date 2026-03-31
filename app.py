@@ -566,13 +566,18 @@ def download_report():
     story.append(Paragraph("<b>Detailed Feedback:</b>", styles['Heading2']))
     story.append(Spacer(1, 15))
 
-    # Parse feedback text for cleaner table display
-    p_feedback = Paragraph(feedback.replace("\n", "<br/>"), styles['Normal'])
+    # Parse HTML-safe characters
+    safe_feedback = feedback.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    # Support basic markdown **bold** text layout from AI
+    safe_feedback = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', safe_feedback)
+    # Convert newlines to HTML breaks for ReportLab
+    safe_feedback = safe_feedback.replace("\n", "<br/>")
+
+    p_feedback = Paragraph(safe_feedback, styles['Normal'])
     
     table_data = [
         ["Category", "Information"],
-        ["Analysis Score", f"{score}%"],
-        ["Feedback Details", p_feedback]
+        ["Analysis Score", f"{score}%"]
     ]
 
     fb_table = Table(table_data, colWidths=[120, 400])
@@ -586,6 +591,11 @@ def download_report():
     ]))
 
     story.append(fb_table)
+    story.append(Spacer(1, 25))
+    
+    story.append(Paragraph("<b>AI Analysis Feedback:</b>", styles['Heading3']))
+    story.append(Spacer(1, 10))
+    story.append(p_feedback)
     doc.build(story, onFirstPage=add_watermark, onLaterPages=add_watermark)
 
     return send_from_directory(".", file_output, as_attachment=True)
