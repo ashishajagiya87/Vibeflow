@@ -446,8 +446,8 @@ def upload():
             )
             feedback = response["message"]["content"]
             
-            # Extract score from AI response using Regex
-            match = re.search(r'Score:?\s*(\d+)', feedback)
+            # Extract score from AI response using Regex (handles brackets and asterisks)
+            match = re.search(r'Score\s*[:=]?\s*[\*\[]*\s*(\d+)', feedback, re.IGNORECASE)
             score = int(match.group(1)) if match else 50
         except:
             feedback = "AI Error: Could not connect to Ollama server."
