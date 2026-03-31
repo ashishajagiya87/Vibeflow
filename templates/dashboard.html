@@ -57,7 +57,9 @@
                 <option value="ats">⚡ Standard ATS Logic (Fast)</option>
 
                 {% for key,value in models.items() %}
-                <option value="{{key}}">🤖 AI: {{value}}</option>
+                {% if key == "resume" %}
+                <option value="{{key}}">🤖 AI: {{value}} (Resume Analyzer)</option>
+                {% endif %}
                 {% endfor %}
 
                 <option disabled>──────── Company Resume Comparison ────────</option>

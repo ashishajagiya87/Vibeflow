@@ -40,10 +40,8 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 AVAILABLE_MODELS = {
-    "balanced": "tinyllama",
-    "fast": "phi3:mini",
-    "medium": "mistral",
-    "smart": "llama3"
+    "chatbot": "tinyllama",
+    "resume": "phi3:mini"
 }
 
 # COMPANY RESUME TEMPLATES
@@ -600,7 +598,7 @@ def chat():
 
     try:
         response = ollama.chat(
-            model="tinyllama",
+            model=AVAILABLE_MODELS.get("chatbot", "tinyllama"),
             messages=[
                 {"role": "system", "content": "You are VibeFlow Assistant. Answer only resume-related questions concisely."},
                 {"role": "user", "content": user_msg}
