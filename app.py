@@ -302,6 +302,16 @@ def init_db():
         resume TEXT
     )
     """)
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS history(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        filename TEXT,
+        model TEXT,
+        score INTEGER,
+        timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
     conn.commit()
     conn.close()
 
@@ -385,7 +395,13 @@ def dashboard():
     if "user" not in session:
         return redirect("/login")
     
-    return render_template("dashboard.html", models=AVAILABLE_MODELS)
+    conn = sqlite3.connect("database.db")
+    c = conn.cursor()
+    c.execute("SELECT filename, model, score, timestamp FROM history WHERE user_email=? ORDER BY timestamp DESC LIMIT 5", (session["user"],))
+    history_records = c.fetchall()
+    conn.close()
+
+    return render_template("dashboard.html", models=AVAILABLE_MODELS, history=history_records)
 
 
 @app.route("/upload", methods=["POST"])
@@ -456,14 +472,21 @@ def upload():
     else:
         feedback, score = "Error: Invalid selection", 0
 
-    # Save Analysis result to user profile
+    # Save Analysis result to user profile & history
     conn = sqlite3.connect("database.db")
     c = conn.cursor()
     c.execute(
         "UPDATE users SET score=?, resume=? WHERE email=?",
         (score, filename, session["user"])
     )
-    conn.commit()
+    c.execute(
+        "INSERT INTO history (user_email, filename, model, score) VALUES (?, ?, ?, ?)",
+        (session["user"], filename, selected_option, score)
+    )
+    
+    # Fetch updated history to instantly show on UI
+    c.execute("SELECT filename, model, score, timestamp FROM history WHERE user_email=? ORDER BY timestamp DESC LIMIT 5", (session["user"],))
+    history_records = c.fetchall()
     conn.close()
 
     return render_template(
@@ -471,7 +494,8 @@ def upload():
         result=feedback,
         score=score,
         skills=skills,
-        models=AVAILABLE_MODELS
+        models=AVAILABLE_MODELS,
+        history=history_records
     )
 
 # ROUTES: ADMIN PANEL
@@ -566,11 +590,8 @@ def download_report():
     story.append(Paragraph("<b>Detailed Feedback:</b>", styles['Heading2']))
     story.append(Spacer(1, 15))
 
-    # Parse HTML-safe characters
     safe_feedback = feedback.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
-    # Support basic markdown **bold** text layout from AI
     safe_feedback = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', safe_feedback)
-    # Convert newlines to HTML breaks for ReportLab
     safe_feedback = safe_feedback.replace("\n", "<br/>")
 
     p_feedback = Paragraph(safe_feedback, styles['Normal'])

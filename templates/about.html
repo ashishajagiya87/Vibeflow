@@ -1,79 +1,128 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div style="width: 100%; max-width: 1100px; display: flex; flex-direction: column; gap: 60px; align-items: center;">
+<div style="width: 100%; max-width: 1100px; display: flex; flex-direction: column; gap: 80px; align-items: center; margin-bottom: 50px;">
 
-    <div class="glass-card" style="padding: clamp(30px, 6vw, 60px); text-align: center; width: 100%;">
-        <h1
-            style="font-size: clamp(32px, 6vw, 50px); margin-bottom: 20px; background: linear-gradient(to right, #00d2ff, #92fe9d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
-            About Vibe Flow
+    <!-- HERO SECTION -->
+    <div class="glass-card" style="padding: clamp(40px, 8vw, 80px) 20px; text-align: center; width: 100%; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: -50px; left: -50px; width: 200px; height: 200px; background: #00d2ff; filter: blur(100px); opacity: 0.1;"></div>
+        <div style="position: absolute; bottom: -50px; right: -50px; width: 200px; height: 200px; background: #92fe9d; filter: blur(100px); opacity: 0.1;"></div>
+        
+        <h1 style="font-size: clamp(36px, 6vw, 56px); margin-bottom: 25px; background: linear-gradient(to right, #00d2ff, #92fe9d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+            About VibeFlow
         </h1>
-        <p style="font-size: clamp(16px, 4vw, 20px); color: #ccc; line-height: 1.8; max-width: 800px; margin: auto;">
-            Vibe Flow is a next-generation AI-powered resume analysis platform.
-            We bridge the gap between talented job seekers and complex Applicant Tracking Systems (ATS)
-            using state-of-the-art Large Language Models.
+        <p style="font-size: clamp(16px, 4vw, 20px); color: var(--text-muted); line-height: 1.8; max-width: 800px; margin: auto;">
+            We are redefining how candidates apply for jobs. VibeFlow is a next-generation AI-powered resume analysis platform designed to bridge the gap between talented job seekers and rigid Applicant Tracking Systems (ATS).
         </p>
     </div>
 
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; width: 100%;">
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(0, 210, 255, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">🤖</div>
-            <h3 style="color: var(--primary);">AI Engine</h3>
-            <p style="color: #888; font-size: 14px;">Powered by Llama 3 and Mistral for deep contextual understanding.
+    <!-- MISSION SECTION -->
+    <div style="width: 100%; display: flex; flex-wrap: wrap; gap: 40px; align-items: center; justify-content: space-between;">
+        <div style="flex: 1; min-width: 300px;">
+            <h2 style="font-size: 36px; margin-bottom: 20px; color: white;">Our <span style="color: #00d2ff;">Mission</span></h2>
+            <p style="color: #aaa; line-height: 1.8; font-size: 16px; margin-bottom: 20px;">
+                Every year, millions of highly qualified candidates are rejected by automated ATS bots simply because of formatting errors, missing keywords, or poor phrasing. We believe that talent should not be blocked by bad algorithms.
+            </p>
+            <p style="color: #aaa; line-height: 1.8; font-size: 16px;">
+                Our mission is to democratize the job search process. We built VibeFlow to give you the exact same AI tools that companies use to filter you out—so you can beat them at their own game.
             </p>
         </div>
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(146, 254, 157, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">🔍</div>
-            <h3 style="color: #92fe9d;">ATS Scanning</h3>
-            <p style="color: #888; font-size: 14px;">Simulates real-world recruiter filters to test your resume.</p>
+        <div class="glass-card" style="flex: 1; min-width: 300px; padding: 40px; text-align: center; border: 1px solid rgba(0,210,255,0.3); background: rgba(0,210,255,0.05);">
+            <i class="fas fa-rocket" style="font-size: 60px; color: #00d2ff; margin-bottom: 20px;"></i>
+            <h3 style="color: white; font-size: 24px;">Empowering 10,000+ Careers</h3>
+            <p style="color: #888; font-size: 15px;">By providing military-grade ATS insights to the public entirely for free.</p>
         </div>
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(255, 162, 0, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">📊</div>
-            <h3 style="color: orange;">Real-time Scoring</h3>
-            <p style="color: #888; font-size: 14px;">Get an instant compatibility score out of 100.</p>
-        </div>
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(0, 210, 255, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">💡</div>
-            <h3 style="color: var(--primary);">Smart Suggestions</h3>
-            <p style="color: #888; font-size: 14px;">AI-driven advice on how to improve your bullet points.</p>
-        </div>
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(146, 254, 157, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">🛠️</div>
-            <h3 style="color: #92fe9d;">Skill Extraction</h3>
-            <p style="color: #888; font-size: 14px;">Automatically detects technical stack and soft skills.</p>
-        </div>
-
-        <div class="glass-card" style="padding: 30px; text-align: center; border: 1px solid rgba(255, 162, 0, 0.2);">
-            <div style="font-size: 40px; margin-bottom: 15px;">📥</div>
-            <h3 style="color: orange;">PDF Reports</h3>
-            <p style="color: #888; font-size: 14px;">Export professional analysis reports for offline review.</p>
-        </div>
-
     </div>
 
-    <div class="glass-card"
-        style="padding: clamp(30px, 6vw, 50px); width: 100%; text-align: center; background: linear-gradient(135deg, rgba(0,210,255,0.05), rgba(146,254,157,0.05));">
-        <h2 style="margin-bottom: 30px; font-size: clamp(24px, 5vw, 32px);">Meet the Developer</h2>
-        <div style="display: flex; justify-content: center; align-items: center; gap: 30px; flex-wrap: wrap;">
-            <div
-                style="width: 100px; height: 100px; background: var(--primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: bold; color: #050b18; border: 4px solid var(--border); flex-shrink: 0;">
+    <!-- FEATURES OVERVIEW -->
+    <div style="width: 100%;">
+        <h2 style="text-align: center; font-size: 36px; margin-bottom: 50px;">Core <span style="color: #92fe9d;">Capabilities</span></h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px;">
+            <div class="glass-card" style="padding: 30px; border: 1px solid rgba(0, 210, 255, 0.2); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                <div style="font-size: 40px; margin-bottom: 15px;">🤖</div>
+                <h3 style="color: var(--primary);">AI Neural Engine</h3>
+                <p style="color: #888; font-size: 15px; line-height: 1.6;">Powered by local LLMs (Phi-3 & TinyLlama) for deep contextual and semantic understanding of your experience.</p>
+            </div>
+            <div class="glass-card" style="padding: 30px; border: 1px solid rgba(146, 254, 157, 0.2); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                <div style="font-size: 40px; margin-bottom: 15px;">🔍</div>
+                <h3 style="color: #92fe9d;">ATS Simulation</h3>
+                <p style="color: #888; font-size: 15px; line-height: 1.6;">Simulates real-world enterprise recruiter filters (like Workday, Taleo) to test your resume structure.</p>
+            </div>
+            <div class="glass-card" style="padding: 30px; border: 1px solid rgba(255, 207, 51, 0.2); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                <div style="font-size: 40px; margin-bottom: 15px;">📊</div>
+                <h3 style="color: #ffcf33;">Dynamic Analytics</h3>
+                <p style="color: #888; font-size: 15px; line-height: 1.6;">Advanced visual tracking with Radar charts, Doughnut matching, and historical upload trends.</p>
+            </div>
+            <div class="glass-card" style="padding: 30px; border: 1px solid rgba(0, 210, 255, 0.2); transition: transform 0.3s;" onmouseover="this.style.transform='translateY(-5px)'" onmouseout="this.style.transform='none'">
+                <div style="font-size: 40px; margin-bottom: 15px;">💡</div>
+                <h3 style="color: var(--primary);">Smart Suggestions</h3>
+                <p style="color: #888; font-size: 15px; line-height: 1.6;">Get actionable, line-by-line AI advice on how to rewrite weak bullet points into high-impact metrics.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TECHNOLOGY STACK -->
+    <div style="width: 100%; text-align: center;">
+        <h2 style="font-size: 36px; margin-bottom: 20px;">Built With <span style="color: #ff4b4b;">Modern Tech</span></h2>
+        <p style="color: #aaa; line-height: 1.8; font-size: 16px; max-width: 600px; margin: 0 auto 40px auto;">
+            We use a completely cutting-edge, lightweight tech stack to process massive amounts of data efficiently.
+        </p>
+        <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fab fa-python" style="color:#00d2ff; margin-right:8px;"></i> Python 3</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fas fa-pepper-hot" style="color:#ff4b4b; margin-right:8px;"></i> Flask Framework</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fas fa-brain" style="color:#92fe9d; margin-right:8px;"></i> Ollama (Phi-3)</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fas fa-chart-pie" style="color:#ffcf33; margin-right:8px;"></i> Chart.js</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fas fa-database" style="color:#aaa; margin-right:8px;"></i> SQLite3</span>
+            <span style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 12px 25px; border-radius: 8px; font-size: 16px; color: white;"><i class="fab fa-html5" style="color:#e34c26; margin-right:8px;"></i> HTML5/CSS3 UI</span>
+        </div>
+    </div>
+
+    <!-- DEVELOPMENT TIMELINE ROADMAP -->
+    <div style="width: 100%; border-left: 3px solid var(--primary); padding-left: 30px; margin-top: 20px;">
+        <h2 style="font-size: 32px; margin-bottom: 40px;">Development Roadmap</h2>
+        
+        <div style="position: relative; margin-bottom: 40px;">
+            <div style="position: absolute; left: -39.5px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
+            <h3 style="color: white; margin: 0 0 10px 0;">Phase 1: Proof of Concept </h3>
+            <p style="color: #888; font-size: 15px; line-height: 1.6;">Built basic Python PDF extraction scripts and tested regex algorithms against simple textual rules.</p>
+        </div>
+
+        <div style="position: relative; margin-bottom: 40px;">
+            <div style="position: absolute; left: -39.5px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 10px var(--primary);"></div>
+            <h3 style="color: white; margin: 0 0 10px 0;">Phase 2: Deep AI Integration </h3>
+            <p style="color: #888; font-size: 15px; line-height: 1.6;">Integrated Ollama to allow offline, private grading using Phi-3 natively. Setup complex structured prompt engineering for reliable outputs.</p>
+        </div>
+
+        <div style="position: relative; margin-bottom: 40px;">
+            <div style="position: absolute; left: -39.5px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #92fe9d; box-shadow: 0 0 10px #92fe9d;"></div>
+            <h3 style="color: white; margin: 0 0 10px 0;">Phase 3: The UI/UX Upgrade (Current) </h3>
+            <p style="color: #888; font-size: 15px; line-height: 1.6;">Revamped the frontend entirely to feature interactive Glassmorphism, 3D Tilt Cards, historical tracking, and robust AI rewriting chatbots.</p>
+        </div>
+        
+        <div style="position: relative;">
+            <div style="position: absolute; left: -39.5px; top: 0; width: 16px; height: 16px; border-radius: 50%; background: #444; border: 2px solid #666;"></div>
+            <h3 style="color: #888; margin: 0 0 10px 0;">Phase 4: Global Scale </h3>
+            <p style="color: #666; font-size: 15px; line-height: 1.6;">Future plans include cloud API deployment, live Google Docs extension, and enterprise recruiter portals.</p>
+        </div>
+    </div>
+
+    <!-- MEET THE DEVELOPER -->
+    <div class="glass-card" style="padding: clamp(40px, 8vw, 60px); width: 100%; text-align: center; background: linear-gradient(135deg, rgba(0,210,255,0.05), rgba(146,254,157,0.05)); border: 1px solid var(--primary);">
+        <h2 style="margin-bottom: 40px; font-size: clamp(28px, 5vw, 36px);">Meet the Developer</h2>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 40px; flex-wrap: wrap;">
+            <div style="width: 120px; height: 120px; background: linear-gradient(135deg, var(--primary), #92fe9d); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: bold; color: #050b18; border: 4px solid var(--border); flex-shrink: 0; box-shadow: 0 10px 30px rgba(0,210,255,0.3);">
                 A
             </div>
-            <div style="text-align: center;">
-                <h3 style="margin: 0; font-size: 24px;">Aashish</h3>
-                <p style="color: #888; margin: 5px 0;">Lead Developer & Architect of Vibe Flow</p>
-                <div style="display: flex; gap: 10px; margin-top: 10px; flex-wrap: wrap; justify-content: center;">
-                    <span
-                        style="padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px;">MCA
-                        Graduate</span>
-                    <span
-                        style="padding: 8px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px;">Python
-                        Developer</span>
+            <div style="text-align: left; max-width: 400px;">
+                <h3 style="margin: 0; font-size: 32px; color: white;">Aashish</h3>
+                <p style="color: #00d2ff; margin: 5px 0 15px 0; font-weight: bold;">Lead Developer & Software Architect</p>
+                <p style="color: #aaa; font-size: 15px; line-height: 1.6; margin-bottom: 20px;">
+                    Passionate about merging AI with intuitive UI to solve real-world problems. Created VibeFlow to help millions of students bypass broken HR systems.
+                </p>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <span style="padding: 6px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2);">MCA Graduate</span>
+                    <span style="padding: 6px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2);">Python Backend</span>
+                    <span style="padding: 6px 15px; background: rgba(255,255,255,0.1); border-radius: 20px; font-size: 13px; border: 1px solid rgba(255,255,255,0.2);">Prompt Engineer</span>
                 </div>
             </div>
         </div>

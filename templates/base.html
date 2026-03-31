@@ -14,8 +14,33 @@
             --bg: #050b18;
             --glass: rgba(255, 255, 255, 0.05);
             --border: rgba(255, 255, 255, 0.1);
+            --text-main: white;
+            --text-muted: #aaa;
+            --card-bg: rgba(0,0,0,0.3);
         }
 
+        body.light-mode {
+            --primary: #007bff;
+            --secondary: #0056b3;
+            --bg: #f4f7f6;
+            --glass: rgba(255, 255, 255, 0.9);
+            --border: rgba(0, 0, 0, 0.1);
+            --text-main: #222;
+            --text-muted: #555;
+            --card-bg: white;
+            background: var(--bg);
+            color: var(--text-main);
+        }
+        body.light-mode::before { opacity: 0.03; background: var(--primary); }
+        body.light-mode .navbar { background: rgba(255, 255, 255, 0.95); }
+        body.light-mode .nav-links a { color: #555; }
+        body.light-mode .nav-links a:hover, body.light-mode .nav-links a.active { color: var(--primary); }
+        body.light-mode .hamburger span { background: #333; }
+        body.light-mode .footer-main { background: #e9ecef; border-top: 1px solid #ddd; }
+        body.light-mode .footer-section h3 { color: #222 !important; }
+        body.light-mode .footer-section p, body.light-mode .footer-links a { color: #555; }
+        body.light-mode .footer-bottom { color: #777; border-top: 1px solid rgba(0,0,0,0.1); }
+        
         * {
             box-sizing: border-box;
         }
@@ -267,6 +292,7 @@
             <a href="/login">Login</a>
             <a href="/register">Register</a>
             {% endif %}
+            <button id="themeToggleBtn" onclick="toggleTheme()" style="background:none; border:none; font-size:18px; cursor:pointer; margin-left:25px; transition:0.3s; padding:5px;">☀️</button>
         </div>
     </nav>
 
@@ -314,6 +340,18 @@ navLinks.forEach(link => {
         link.classList.add('active');
     }
 });
+
+// Theme Toggle
+function toggleTheme() {
+    document.body.classList.toggle('light-mode');
+    const isLight = document.body.classList.contains('light-mode');
+    localStorage.setItem('vibeflow_theme', isLight ? 'light' : 'dark');
+    document.getElementById('themeToggleBtn').innerText = isLight ? '🌙' : '☀️';
+}
+if (localStorage.getItem('vibeflow_theme') === 'light') {
+    document.body.classList.add('light-mode');
+    document.getElementById('themeToggleBtn').innerText = '🌙';
+}
 </script>
 </body>
 

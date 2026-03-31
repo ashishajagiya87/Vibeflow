@@ -144,7 +144,7 @@
         </div>
 
         <h1>SYSTEM ANALYZING</h1>
-        <p class="status-text">Deploying Neural Network for Resume Evaluation...</p>
+        <p class="status-text" id="dynamic-text">Deploying Neural Network for Resume Evaluation...</p>
 
         <div class="steps-container">
             <div class="step-item active-step" id="step1">
@@ -165,6 +165,12 @@
     <script>
         // Script to simulate progress so the user sees something changing
         const steps = ["step1", "step2", "step3", "step4"];
+        const dynamicTexts = [
+            "Extracting resume keywords...",
+            "Checking against ATS constraints...",
+            "Evaluating grammar and impact...",
+            "Structuring final report..."
+        ];
         let currentStep = 0;
 
         const interval = setInterval(() => {
@@ -172,10 +178,11 @@
                 document.getElementById(steps[currentStep]).classList.remove('active-step');
                 currentStep++;
                 document.getElementById(steps[currentStep]).classList.add('active-step');
+                document.getElementById('dynamic-text').innerText = dynamicTexts[currentStep];
             } else {
                 clearInterval(interval);
             }
-        }, 3000); 
+        }, 2500); 
     </script>
 
 </body>
