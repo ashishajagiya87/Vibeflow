@@ -3,7 +3,11 @@ import sqlite3
 import re
 import time
 import fitz  
-import ollama
+try:
+    import ollama
+    OLLAMA_AVAILABLE = True
+except ImportError:
+    OLLAMA_AVAILABLE = False
 from flask import Flask
 from flask import render_template
 from flask import request
