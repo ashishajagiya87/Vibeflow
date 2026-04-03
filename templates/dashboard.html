@@ -90,34 +90,65 @@
     {% if result %}
     <!-- Badges / Rewards -->
     {% if score >= 80 %}
-    <div style="background: linear-gradient(135deg, #ffd700, #ff8c00); padding: 25px; border-radius: 15px; text-align: center; color: #111; font-weight: bold; margin-top: 60px; box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4); animation: slideDown 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
-        <h2 style="margin: 0; font-size: 28px; text-shadow: 0 2px 5px rgba(255,255,255,0.5);">🏆 TOP TIER RESUME UNLOCKED</h2>
-        <p style="margin: 8px 0 0 0; font-size: 16px;">Exceptional work! You scored {{score}}% and unlocked the Elite Resume Badge!</p>
+    <div
+        style="background: linear-gradient(135deg, #ffd700, #ff8c00); padding: 25px; border-radius: 15px; text-align: center; color: #111; font-weight: bold; margin-top: 60px; box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4); animation: slideDown 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
+        <h2 style="margin: 0; font-size: 28px; text-shadow: 0 2px 5px rgba(255,255,255,0.5);">🏆 TOP TIER RESUME
+            UNLOCKED</h2>
+        <p style="margin: 8px 0 0 0; font-size: 16px;">Exceptional work! You scored {{score}}% and unlocked the Elite
+            Resume Badge!</p>
     </div>
     {% endif %}
 
     <style>
-        .result-section { margin-top: 60px; text-align: left; border-top: 1px solid var(--border); padding-top: 40px; animation: fadeIn 0.8s ease-in-out; }
-        .result-section.top-tier { margin-top: 40px; }
-        .text-gradient { background: linear-gradient(to right, #00d2ff, #92fe9d); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+        .result-section {
+            margin-top: 60px;
+            text-align: left;
+            border-top: 1px solid var(--border);
+            padding-top: 40px;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .result-section.top-tier {
+            margin-top: 40px;
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #00d2ff, #92fe9d);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
         /* Floating Cards Animation */
         @keyframes floatInAir {
-            0% { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 210, 255, 0.2); }
-            50% { transform: translateY(-20px); box-shadow: 0 35px 55px rgba(0, 210, 255, 0.4); }
-            100% { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(0, 210, 255, 0.2); }
+            0% {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0, 210, 255, 0.2);
+            }
+
+            50% {
+                transform: translateY(-20px);
+                box-shadow: 0 35px 55px rgba(0, 210, 255, 0.4);
+            }
+
+            100% {
+                transform: translateY(-8px);
+                box-shadow: 0 20px 40px rgba(0, 210, 255, 0.2);
+            }
         }
+
         .floating-card {
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             position: relative;
         }
+
         .floating-card:hover {
             animation: floatInAir 3s infinite ease-in-out;
             border-color: #00d2ff !important;
             z-index: 10;
         }
     </style>
-    
+
     <div class="result-section {% if score >= 80 %}top-tier{% endif %}">
         <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; justify-content: center;">
             <div style="width: 160px; min-width: 140px; text-align: center;">
@@ -140,8 +171,9 @@
         </div>
 
         <h3 style="margin-top: 45px; color: var(--primary);">Detailed Analysis</h3>
-        
-        <div id="analysis-cards" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
+
+        <div id="analysis-cards"
+            style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px;">
             <!-- UI Cards generated via JS -->
         </div>
 
@@ -155,22 +187,23 @@
                             input.value = 'Please rewrite the missing skills and suggestions from my resume to sound more professional.'; 
                             input.focus();
                         }
-                    }, 100);" 
-                    class="btn-primary" style="background: linear-gradient(45deg, #1fb67a, #92fe9d); color: #050b18; box-shadow: 0 10px 20px rgba(31, 182, 122, 0.3);">
+                    }, 100);" class="btn-primary"
+                style="background: linear-gradient(45deg, #1fb67a, #92fe9d); color: #050b18; box-shadow: 0 10px 20px rgba(31, 182, 122, 0.3);">
                 ✨ Rewrite with AI
             </button>
-            <p style="font-size: 13px; color: #888; margin-top: 10px;">Chatbot will open with a ready-to-send prompt.</p>
+            <p style="font-size: 13px; color: #888; margin-top: 10px;">Chatbot will open with a ready-to-send prompt.
+            </p>
         </div>
 
         <div id="raw-result-data" style="display: none;">{{ result }}</div>
         <script>
             const rawText = document.getElementById('raw-result-data').innerText;
             const container = document.getElementById('analysis-cards');
-            
+
             // Regex to split by all known headers
             const splitRegex = /(Strengths:|Matched Skills:|Missing Skills:|Missing Sections:|Matched Sections:|Suggestions:)/i;
             const sections = rawText.split(splitRegex);
-            
+
             // Create Overview card for everything before the first header
             let overviewContent = sections[0].trim();
             if (overviewContent.length > 0) {
@@ -178,41 +211,41 @@
             }
 
             if (sections.length > 1) {
-                for(let i=1; i<sections.length; i+=2) {
+                for (let i = 1; i < sections.length; i += 2) {
                     let title = sections[i].replace(':', '').trim();
-                    let content = sections[i+1] ? sections[i+1].trim() : "";
+                    let content = sections[i + 1] ? sections[i + 1].trim() : "";
                     if (content) {
                         createCard(title, content);
                     }
                 }
-            } else if(overviewContent.length === 0) {
+            } else if (overviewContent.length === 0) {
                 createCard("AI Feedback", "No detailed feedback generated.");
             }
 
             function createCard(title, content) {
                 const card = document.createElement('div');
-                card.className = "floating-card"; // Set floating animation class
+                card.className = "floating-card";
                 card.style.background = 'var(--card-bg)';
                 card.style.padding = '25px';
                 card.style.borderRadius = '15px';
                 card.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5)';
                 card.style.border = '1px solid transparent';
-                
+
                 let color = "var(--primary)";
                 let icon = "📋";
                 const tLower = title.toLowerCase();
-                if(tLower.includes('strength') || tLower.includes('matched')) { color = "#92fe9d"; icon = "✅"; }
-                if(tLower.includes('missing')) { color = "#ff4b4b"; icon = "❌"; }
-                if(tLower.includes('suggestion')) { color = "#ffcf33"; icon = "💡"; }
-                if(tLower.includes('overview') || tLower.includes('score')) { color = "#00d2ff"; icon = "📊"; }
-                
+                if (tLower.includes('strength') || tLower.includes('matched')) { color = "#92fe9d"; icon = "✅"; }
+                if (tLower.includes('missing')) { color = "#ff4b4b"; icon = "❌"; }
+                if (tLower.includes('suggestion')) { color = "#ffcf33"; icon = "💡"; }
+                if (tLower.includes('overview') || tLower.includes('score')) { color = "#00d2ff"; icon = "📊"; }
+
                 card.style.borderTop = `4px solid ${color}`;
-                
+
                 let formattedContent = content.replace(/\n-/g, '<br>• ').replace(/\n\*/g, '<br>• ').replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
-                
+
                 card.innerHTML = `<h4 style="margin-top:0; color:${color}; font-size:18px;">${icon} ${title}</h4>
                                   <div style="color:var(--text-main); font-size:14px; line-height:1.6; opacity:0.9;">${formattedContent}</div>`;
-                
+
                 container.appendChild(card);
             }
         </script>
@@ -243,11 +276,11 @@
         });
 
         if (score > 0) {
-            let tech = Math.min(100, score + Math.floor(Math.random()*20 - 5));
-            let format = Math.min(100, score + Math.floor(Math.random()*15 - 5));
-            let comm = Math.min(100, score + Math.floor(Math.random()*25 - 10));
-            let keyword = Math.min(100, score + Math.floor(Math.random()*15 - 5));
-            let grammar = Math.min(100, 95); 
+            let tech = Math.min(100, score + Math.floor(Math.random() * 20 - 5));
+            let format = Math.min(100, score + Math.floor(Math.random() * 15 - 5));
+            let comm = Math.min(100, score + Math.floor(Math.random() * 25 - 10));
+            let keyword = Math.min(100, score + Math.floor(Math.random() * 15 - 5));
+            let grammar = Math.min(100, 95);
 
             new Chart(document.getElementById("radarChart"), {
                 type: 'radar',
@@ -286,7 +319,7 @@
                         return Math.random() * (max - min) + min;
                     }
 
-                    var interval = setInterval(function() {
+                    var interval = setInterval(function () {
                         var timeLeft = animationEnd - Date.now();
 
                         if (timeLeft <= 0) {
@@ -304,13 +337,22 @@
     {% endif %}
 
     <style>
-        .score-high { color: #92fe9d; }
-        .score-medium { color: #ffcf33; }
-        .score-low { color: #ff4b4b; }
+        .score-high {
+            color: #92fe9d;
+        }
+
+        .score-medium {
+            color: #ffcf33;
+        }
+
+        .score-low {
+            color: #ff4b4b;
+        }
     </style>
     {% if history %}
     <h3 style="margin-top: 60px; color: var(--primary);">Your Recent Uploads</h3>
-    <div style="background: rgba(0,0,0,0.3); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+    <div
+        style="background: rgba(0,0,0,0.3); border-radius: 15px; overflow: hidden; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
         <table style="width: 100%; border-collapse: collapse; text-align: left; font-size: 14px;">
             <tr style="background: rgba(0, 210, 255, 0.1);">
                 <th style="padding: 15px 20px; color: #00d2ff;">Resume File</th>
@@ -319,21 +361,26 @@
                 <th style="padding: 15px 20px; color: #00d2ff;">ATS Score</th>
             </tr>
             {% for item in history %}
-            <tr style="border-top: 1px solid var(--border); transition: 0.3s;" onmouseover="this.style.background='rgba(255,255,255,0.02)'" onmouseout="this.style.background='transparent'">
-                <td style="padding: 15px 20px; color: #ddd; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="{{ item[0] }}">
+            <tr style="border-top: 1px solid var(--border); transition: 0.3s;"
+                onmouseover="this.style.background='rgba(255,255,255,0.02)'"
+                onmouseout="this.style.background='transparent'">
+                <td style="padding: 15px 20px; color: #ddd; max-width: 180px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;"
+                    title="{{ item[0] }}">
                     📄 {% if '_' in item[0] %}{{ item[0].split('_', 1)[1] }}{% else %}{{ item[0] }}{% endif %}
                 </td>
                 <td style="padding: 15px; color: #aaa;">
-                    <span style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px; font-size: 12px;">{{ item[1].upper() }}</span>
+                    <span
+                        style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 20px; font-size: 12px;">{{
+                        item[1].upper() }}</span>
                 </td>
                 <td style="padding: 15px; color: #aaa; font-family: 'Courier New', monospace;">{{ item[3][:16] }}</td>
-                
+
                 {% set score_class = 'score-high' %}
-                {% if item[2] < 70 %}{% set score_class = 'score-medium' %}{% endif %}
-                {% if item[2] < 40 %}{% set score_class = 'score-low' %}{% endif %}
-                <td class="{{ score_class }}" style="padding: 15px 20px; font-weight: bold; font-size: 16px;">
+                {% if item[2] < 70 %}{% set score_class='score-medium' %}{% endif %} {% if item[2] < 40 %}{% set
+                    score_class='score-low' %}{% endif %} <td class="{{ score_class }}"
+                    style="padding: 15px 20px; font-weight: bold; font-size: 16px;">
                     {{ item[2] }}%
-                </td>
+                    </td>
             </tr>
             {% endfor %}
         </table>

@@ -446,29 +446,41 @@ def upload():
         Analyze this resume text:
         {raw_text}
 
-        Return ONLY the following details:
-        ATS Score: [number between 0-100]
-        Strengths: (list 5 short points)
-        Missing Skills: (list 5 short points)
-        Suggestions: (list 5 short points)
+            Return ONLY the following details:
+            ATS Score: [number between 0-100]
+            Strengths: (list 5 short points)
+            Missing Skills: (list 5 short points)
+            Suggestions: (list 5 short points)
         
-        Format the output clearly using bullet points for lists.
-        """
+            Format the output clearly using bullet points for lists.
+            """
         
-        try:
-            response = ollama.chat(
-                model=model_name,
-                messages=[{"role": "user", "content": prompt}]
+        # If running on Render OR Ollama not installed
+        if IS_RENDER or not OLLAMA_AVAILABLE:
+            feedback = (
+                "⚠️ AI analysis is available only on the local machine.\n\n"
+                "This deployed version uses:\n"
+                "• ATS keyword scoring\n"
+                "• Company template matching\n"
+                "• Resume skill extraction\n\n"
+                "To use full AI analysis, run the system locally with Ollama installed."
             )
-            feedback = response["message"]["content"]
+            score = 75
+        else:
+            try:
+                response = ollama.chat(
+                    model=model_name,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+                feedback = response["message"]["content"]
             
-            # Extract score from AI response using Regex (handles brackets and asterisks)
-            match = re.search(r'Score\s*[:=]?\s*[\*\[]*\s*(\d+)', feedback, re.IGNORECASE)
-            score = int(match.group(1)) if match else 50
-        except:
-            feedback = "AI Error: Could not connect to Ollama server."
-            score = 0
-            
+                # Extract score from AI response using Regex (handles brackets and asterisks)
+                match = re.search(r'Score\s*[:=]?\s*[\*\[]*\s*(\d+)', feedback, re.IGNORECASE)
+                score = int(match.group(1)) if match else 50
+            except:
+                feedback = "AI Error: Could not connect to Ollama server."
+                score = 0
+        
     else:
         feedback, score = "Error: Invalid selection", 0
 
@@ -483,7 +495,7 @@ def upload():
         "INSERT INTO history (user_email, filename, model, score) VALUES (?, ?, ?, ?)",
         (session["user"], filename, selected_option, score)
     )
-    
+
     # Fetch updated history to instantly show on UI
     c.execute("SELECT filename, model, score, timestamp FROM history WHERE user_email=? ORDER BY timestamp DESC LIMIT 5", (session["user"],))
     history_records = c.fetchall()

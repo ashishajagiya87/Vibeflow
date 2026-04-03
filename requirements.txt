@@ -5,4 +5,5 @@ numpy
 scikit-learn
 nltk
 PyMuPDF
+reportlab
 #-> pip install -r requirements.txt
