@@ -1,7 +1,8 @@
-Flask
-PyPDF2
-ollama
-python-dotenv
-Werkzeug
-
+flask
+gunicorn
+pandas
+numpy
+scikit-learn
+nltk
+PyMuPDF
 #-> pip install -r requirements.txt
